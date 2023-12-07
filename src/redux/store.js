@@ -6,13 +6,14 @@ import axios from 'axios';
 
 function* rootSaga() {
   yield takeLatest ('SAGA/GET_PLANTS', getPlants);
+  yield takeLatest ('SAGA/POST_PLANT', postPlant);
 }
 
 const sagaMiddleware = createSagaMiddleware();
 
 const plantList = (state = [], action) => {
   switch (action.type) {
-    case 'ADD_PLANT':
+    case 'SET_PLANTS':
       return action.payload
     default:
       return state;
@@ -25,11 +26,25 @@ function* getPlants (){
           url: '/api/plants'
       })
       yield put({
-          type: "ADD_PLANT",
+          type: "SET_PLANTS",
           payload: response.data
       })
   } catch (error) {
       console.log('SAGA getPlants failed', error);
+  }
+}
+function* postPlant (action){
+  try {
+    const response = yield axios({
+      method: 'POST',
+      url: 'api/plants',
+      data: action.payload
+    })
+    yield put({
+      type: "SAGA/GET_PLANTS"
+    })
+  } catch (error) {
+    console.log('Error in SAGA postPlant', error)
   }
 }
 
