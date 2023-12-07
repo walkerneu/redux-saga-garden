@@ -5,16 +5,21 @@ import { useDispatch, useSelector} from 'react-redux';
 function PlantList() {
     const dispatch = useDispatch();
 
-    const reduxState = useSelector(store => store);
+    const plantList = useSelector(store => store.plantList);
 
     useEffect(() => {
-        // dispatch an action to request the plantList from the API
+        dispatch({
+            type: 'SAGA/GET_PLANTS'
+        })
     }, []); 
+    console.log(plantList);
 
     return (
         <div>
             <h3>This is the plant list</h3>
-            <pre>{JSON.stringify(reduxState)}</pre>
+           {plantList.map((plant) => (
+            <div key={plant.id}>{plant.name}</div>
+           ))}
         </div>
     );
 }
