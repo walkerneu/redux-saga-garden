@@ -7,6 +7,7 @@ import axios from 'axios';
 function* rootSaga() {
   yield takeLatest ('SAGA/GET_PLANTS', getPlants);
   yield takeLatest ('SAGA/POST_PLANT', postPlant);
+  yield takeLatest ('SAGA/DELETE_PLANT', deletePlant);
 }
 
 const sagaMiddleware = createSagaMiddleware();
@@ -45,6 +46,19 @@ function* postPlant (action){
     })
   } catch (error) {
     console.log('Error in SAGA postPlant', error)
+  }
+}
+function* deletePlant (action){
+  try {
+    const response = yield axios({
+      method: 'DELETE',
+      url: `api/plants/${action.payload}`
+    })
+    yield put({
+      type: 'SAGA/GET_PLANTS'
+    })
+  } catch (error) {
+    console.log('Error in SAGA deletePlant', error)
   }
 }
 

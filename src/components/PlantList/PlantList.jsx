@@ -11,14 +11,23 @@ function PlantList() {
         dispatch({
             type: 'SAGA/GET_PLANTS'
         })
-    }, []); 
-    console.log(plantList);
+    }, []);
+    
+    const deletePlant = (id) => {
+        dispatch({
+            type: 'SAGA/DELETE_PLANT',
+            payload: id
+        })
+    }
 
     return (
         <div>
             <h3>This is the plant list</h3>
            {plantList.map((plant) => (
-            <div key={plant.id}>{plant.name}</div>
+            <div key={plant.id}>
+                {plant.name} 
+            <button onClick={() => deletePlant(plant.id)}>DELETE</button>
+            </div>
            ))}
         </div>
     );
